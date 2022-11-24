@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
-//const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 //const jwt = require('jsonwebtoken');
 require('dotenv').config();
 //const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -15,8 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 
-//const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.mcmgyi9.mongodb.net/?retryWrites=true&w=majority"`;
-//const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.mcmgyi9.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -25,13 +22,19 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const buyersCollection = client.db('laptopReseller').collection('buyers');
+        const usersCollection = client.db('laptopReseller').collection('users');
 
         
-        app.post('/buyers',  async (req, res) => {
-            const buyer= req.body;
-            const result = await buyersCollection.insertOne(buyer);
-            res.send(result);
+        app.post('/users',  async (req, res) => {
+            const user= req.body;
+            const email= await usersCollection.findOne({email:user.email});
+            if(email){
+                res.send({response:"User already found"});
+            } else{
+                const result = await usersCollection.insertOne(user);
+                res.send({response:"User created and User info saved in database"});
+            }
+           
         });
     }
     finally {
