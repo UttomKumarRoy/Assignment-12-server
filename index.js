@@ -24,7 +24,12 @@ async function run() {
     try {
         const usersCollection = client.db('laptopReseller').collection('users');
 
-        
+        app.get('/users/:email', async (req,res) =>{
+            const email=req.params.email;
+            const user= await usersCollection.findOne({email:email});
+            res.send({userType:user.userType})
+        })
+
         app.post('/users',  async (req, res) => {
             const user= req.body;
             const email= await usersCollection.findOne({email:user.email});
