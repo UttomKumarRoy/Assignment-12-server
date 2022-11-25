@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 //const jwt = require('jsonwebtoken');
 require('dotenv').config();
 //const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -28,17 +28,7 @@ async function run() {
             const email=req.params.email;
             const user= await usersCollection.findOne({email:email});
             res.send({userType:user.userType})
-        })
-
-        app.get('/sellers', async (req,res) =>{
-            const result= await usersCollection.find({userType:"Seller"}).toArray();
-            res.send(result)
-        })
-
-        app.get('/buyers', async (req,res) =>{
-            const result= await usersCollection.find({userType:"Buyer"}).toArray();
-            res.send(result)
-        })
+        });
 
         app.post('/users',  async (req, res) => {
             const user= req.body;
@@ -51,6 +41,30 @@ async function run() {
             }
            
         });
+
+        app.get('/sellers', async (req,res) =>{
+            const result= await usersCollection.find({userType:"Seller"}).toArray();
+            res.send(result)
+        })
+
+        app.delete('/sellers/:id', async (req,res) =>{
+            const id=req.params.id;
+            const result= await usersCollection.deleteOne({_id:ObjectId(id)});
+            res.send(result);
+        })
+
+        app.get('/buyers', async (req,res) =>{
+            const result= await usersCollection.find({userType:"Buyer"}).toArray();
+            res.send(result)
+        })
+
+        app.delete('/buyers/:id', async (req,res) =>{
+            const id=req.params.id;
+            const result= await usersCollection.deleteOne({_id:ObjectId(id)});
+            res.send(result);
+        })
+
+        
     }
     finally {
 
