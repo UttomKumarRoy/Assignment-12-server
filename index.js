@@ -30,6 +30,16 @@ async function run() {
             res.send({userType:user.userType})
         })
 
+        app.get('/sellers', async (req,res) =>{
+            const result= await usersCollection.find({userType:"Seller"}).toArray();
+            res.send(result)
+        })
+
+        app.get('/buyers', async (req,res) =>{
+            const result= await usersCollection.find({userType:"Buyer"}).toArray();
+            res.send(result)
+        })
+
         app.post('/users',  async (req, res) => {
             const user= req.body;
             const email= await usersCollection.findOne({email:user.email});
