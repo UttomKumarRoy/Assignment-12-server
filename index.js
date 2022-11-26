@@ -49,6 +49,19 @@ async function run() {
             res.send(result)
         })
 
+        app.put('/sellers/:id', async (req,res) =>{
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    isVerified: 'true'
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
         app.delete('/sellers/:id', async (req,res) =>{
             const id=req.params.id;
             const result= await usersCollection.deleteOne({_id:ObjectId(id)});
