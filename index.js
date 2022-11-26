@@ -79,6 +79,13 @@ async function run() {
             res.send(result);
         })
 
+
+        app.get('/products', async (req,res) =>{
+            
+            const products= await productsCollection.find({isAdvertised:"true"}).toArray();
+            res.send(products)
+        });
+
         app.get('/products/:email', async (req,res) =>{
             const email=req.params.email;
             const products= await productsCollection.find({email:email}).toArray();
@@ -125,3 +132,7 @@ app.get('/', async (req, res) => {
 })
 
 app.listen(port, () => console.log(`Laptop Reseller Server running on ${port}`))
+
+
+
+
