@@ -23,6 +23,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const usersCollection = client.db('laptopReseller').collection('users');
+        const productsCollection = client.db('laptopReseller').collection('products');
+
 
         app.get('/users/:email', async (req,res) =>{
             const email=req.params.email;
@@ -63,6 +65,18 @@ async function run() {
             const result= await usersCollection.deleteOne({_id:ObjectId(id)});
             res.send(result);
         })
+
+        app.get('/products/:email', async (req,res) =>{
+            const email=req.params.email;
+            const products= await productsCollection.find({email:email}).toArray();
+            res.send(products)
+        });
+
+        app.post('/products',  async (req, res) => {
+            const product= req.body;
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
 
         
     }
