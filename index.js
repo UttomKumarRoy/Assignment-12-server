@@ -24,6 +24,8 @@ async function run() {
     try {
         const usersCollection = client.db('laptopReseller').collection('users');
         const productsCollection = client.db('laptopReseller').collection('products');
+        const bookingsCollection = client.db('laptopReseller').collection('bookings');
+
 
 
         app.get('/users/:email', async (req,res) =>{
@@ -130,6 +132,12 @@ async function run() {
         app.get('/dell', async (req,res) =>{ 
             const products= await productsCollection.find({productCategory:"Dell"}).toArray();
             res.send(products)
+        });
+
+        app.post('/bookings',  async (req, res) => {
+            const booking= req.body;
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
         });
 
         
