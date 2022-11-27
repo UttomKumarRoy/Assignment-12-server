@@ -117,6 +117,21 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/asus', async (req,res) =>{
+            const products= await productsCollection.find({productCategory:"Asus"}).toArray();
+            res.send(products)
+        });
+
+        app.get('/lenovo', async (req,res) =>{
+            const products= await productsCollection.find({productCategory:"Lenovo"}).toArray();
+            res.send(products)
+        });
+
+        app.get('/dell', async (req,res) =>{ 
+            const products= await productsCollection.find({productCategory:"Dell"}).toArray();
+            res.send(products)
+        });
+
         
     }
     finally {
