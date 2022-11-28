@@ -136,10 +136,16 @@ async function run() {
 
         app.post('/bookings',  async (req, res) => {
             const booking= req.body;
+            const AlreadyBooked= await bookingsCollection.findOne({email:booking.email, productName:booking.productName});
+            if(AlreadyBooked){
+                res.send({response:"Product already booked"});
+            } else {
             const result = await bookingsCollection.insertOne(booking);
-            res.send(result);
+            res.send({response:"Product  booked successfully"});
+            }
+            
         });
-
+    
         
     }
     finally {
