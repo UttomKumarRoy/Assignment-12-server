@@ -134,6 +134,12 @@ async function run() {
             res.send(products)
         });
 
+        app.get('/bookings/:email', async (req,res) =>{
+            const email=req.params.email;
+            const products= await bookingsCollection.find({email:email}).toArray();
+            res.send(products)
+        });
+
         app.post('/bookings',  async (req, res) => {
             const booking= req.body;
             const AlreadyBooked= await bookingsCollection.findOne({email:booking.email, productName:booking.productName});
@@ -161,7 +167,4 @@ app.get('/', async (req, res) => {
 })
 
 app.listen(port, () => console.log(`Laptop Reseller Server running on ${port}`))
-
-
-
 
